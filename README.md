@@ -100,7 +100,11 @@ query {
 
 Ideally i would use flask for a small crud project but graphql extension of flask repository is not updated for a while and conflicts with new version of werkzeug thus i moved to django.
 All of the services defined and runs through docker-compose. (DB,Rabbitmq,django,celery,simulation). Celery is responsible to consume the queue without any error handling :)). Simulation is responsible to feed location data. Initially i add a 1 sec timeout but when i tested without timeout i could hit 160 rps on my local which is around 13m request per day. 
-This is the first time i have been using graphql thus most of the code is chatgpt generated (api/views.py). Ideally i would separate the models and views for device and location to get closer to the microservice architecture as much as you can do using django.
+This is the first time i have been using graphql thus most of the code is chatgpt generated (api/views.py). Ideally i would separate the models and views for device and location to get closer to the microservice architecture as much as you can do using django. 
+
+For tests, instead of expanding the tests coverage i went out with friends. 
+
+And i used my work computer which is setted up for a different github user and zip the project. Thus no commit history :) 
 
 
 
