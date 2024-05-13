@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  django:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - rabbitmq
+      - db
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    command: sh -c "poetry run python manage.py makemigrations && python manage.py test && poetry run python manage.py migrate && poetry run python manage.py runserver 0.0.0.0:8000"
+
+  celery_worker:
+    build: .
+    depends_on:
+      - rabbitmq
+      - db
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    command: celery -A api worker -l info
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: test_db_1
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+
+  simulation:
+    build:
+      context: .
+      dockerfile: simulation/Dockerfile
+    depends_on:
+      - rabbitmq
+      - db
+      - django
